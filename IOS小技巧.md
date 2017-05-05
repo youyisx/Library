@@ -204,3 +204,8 @@ UICollectionView在reloadItems的时候，默认会附加一个隐式的fade动�
 
 	
 [--->查看更多内容](http://www.tuicool.com/articles/numYreu)
+
+
+### Mac OS X中开启或关闭显示隐藏文件命令
+	defaults write com.apple.finder AppleShowAllFiles -bool true       此命令显示隐藏文件
+	defaults write com.apple.finder AppleShowAllFiles -bool false      此命令关闭显示隐藏文件
