@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FMDBDemo/ViewController.m"
-            timestampString = "515041325.10679"
+            timestampString = "516091574.367665"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
             landmarkName = "-clickedAdd:"
             landmarkType = "7">
          </BreakpointContent>

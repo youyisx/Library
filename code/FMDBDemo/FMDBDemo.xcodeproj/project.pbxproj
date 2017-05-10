@@ -16,6 +16,8 @@
 		5F571B2C1EB1D0BB00292FA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F571B2A1EB1D0BB00292FA9 /* LaunchScreen.storyboard */; };
 		5F571B351EB1D19F00292FA9 /* SXDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571B341EB1D19F00292FA9 /* SXDBManager.m */; };
 		5F571B381EB1D40E00292FA9 /* SXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F571B371EB1D40E00292FA9 /* SXUser.m */; };
+		5F69B8541EC1D04F0022F4DD /* SXDBManager+Cache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F69B8531EC1D04F0022F4DD /* SXDBManager+Cache.m */; };
+		5F92CFDA1EC2B1F5007A8977 /* SXDBLoop.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F92CFD91EC2B1F5007A8977 /* SXDBLoop.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,10 @@
 		5F571B341EB1D19F00292FA9 /* SXDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SXDBManager.m; sourceTree = "<group>"; };
 		5F571B361EB1D40E00292FA9 /* SXUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SXUser.h; sourceTree = "<group>"; };
 		5F571B371EB1D40E00292FA9 /* SXUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SXUser.m; sourceTree = "<group>"; };
+		5F69B8521EC1D04F0022F4DD /* SXDBManager+Cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SXDBManager+Cache.h"; sourceTree = "<group>"; };
+		5F69B8531EC1D04F0022F4DD /* SXDBManager+Cache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SXDBManager+Cache.m"; sourceTree = "<group>"; };
+		5F92CFD81EC2B1F5007A8977 /* SXDBLoop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SXDBLoop.h; sourceTree = "<group>"; };
+		5F92CFD91EC2B1F5007A8977 /* SXDBLoop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SXDBLoop.m; sourceTree = "<group>"; };
 		67B7B2C3A36B60C4015B9659 /* libPods-FMDBDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FMDBDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -82,6 +88,10 @@
 				5F571B1C1EB1D0BB00292FA9 /* Supporting Files */,
 				5F571B331EB1D19F00292FA9 /* SXDBManager.h */,
 				5F571B341EB1D19F00292FA9 /* SXDBManager.m */,
+				5F69B8521EC1D04F0022F4DD /* SXDBManager+Cache.h */,
+				5F69B8531EC1D04F0022F4DD /* SXDBManager+Cache.m */,
+				5F92CFD81EC2B1F5007A8977 /* SXDBLoop.h */,
+				5F92CFD91EC2B1F5007A8977 /* SXDBLoop.m */,
 				5F571B361EB1D40E00292FA9 /* SXUser.h */,
 				5F571B371EB1D40E00292FA9 /* SXUser.m */,
 			);
@@ -147,8 +157,8 @@
 				TargetAttributes = {
 					5F571B181EB1D0BB00292FA9 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 8E8B62FMRK;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 4BEQFQCTTT;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -237,6 +247,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F571B351EB1D19F00292FA9 /* SXDBManager.m in Sources */,
+				5F92CFDA1EC2B1F5007A8977 /* SXDBLoop.m in Sources */,
+				5F69B8541EC1D04F0022F4DD /* SXDBManager+Cache.m in Sources */,
 				5F571B241EB1D0BB00292FA9 /* ViewController.m in Sources */,
 				5F571B211EB1D0BB00292FA9 /* AppDelegate.m in Sources */,
 				5F571B1E1EB1D0BB00292FA9 /* main.m in Sources */,
@@ -359,13 +371,14 @@
 			baseConfigurationReference = 2F5134317B90E991D9403004 /* Pods-FMDBDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8E8B62FMRK;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4BEQFQCTTT;
 				INFOPLIST_FILE = FMDBDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sobey.FMDBDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jumei.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4a04a549-f11c-4191-87ef-89b64dfef159";
-				PROVISIONING_PROFILE_SPECIFIER = wildcardProfile;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -374,13 +387,14 @@
 			baseConfigurationReference = 0E8B9F2E812F29B6224AE9B5 /* Pods-FMDBDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8E8B62FMRK;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4BEQFQCTTT;
 				INFOPLIST_FILE = FMDBDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sobey.FMDBDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jumei.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4a04a549-f11c-4191-87ef-89b64dfef159";
-				PROVISIONING_PROFILE_SPECIFIER = wildcardProfile;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

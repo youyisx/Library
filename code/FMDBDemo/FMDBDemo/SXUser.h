@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface SXUser : NSObject
-@property (nonatomic, assign)int uid;
+@property (nonatomic, copy) NSString * uid;
 @property (nonatomic, copy)  NSString * name;
 @property (nonatomic, copy)  NSString * des;
 @property (nonatomic, strong) NSDate * creatDate;

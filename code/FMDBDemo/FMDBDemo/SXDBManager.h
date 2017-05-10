@@ -14,7 +14,7 @@
 
 - (void)addUser:(SXUser *)user;
 
-- (void)deleteUser:(int)uid;
+- (void)deleteUser:(NSString *)uid;
 
 - (void)userList:(void(^)(NSArray <SXUser *>*list))block;
 //批量处理

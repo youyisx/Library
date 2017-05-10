@@ -12,6 +12,6 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"SXUser:uid->%d name:%@ des:%@ creatDate:%@", _uid,_name,_des,_creatDate];
+    return [NSString stringWithFormat:@"SXUser:uid->%@ name:%@ des:%@ creatDate:%@", _uid,_name,_des,_creatDate];
 }
 @end
