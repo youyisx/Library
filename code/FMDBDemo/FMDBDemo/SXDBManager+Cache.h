@@ -14,6 +14,8 @@
 
 @property (nonatomic,readonly) BOOL isLoop;
 
+- (void)initialConfiguration;
+
 - (void)delayAddUser:(SXUser *)user;
 
 - (void)delayAddUsers:(NSArray <SXUser *>*)users;

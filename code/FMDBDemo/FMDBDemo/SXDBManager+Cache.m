@@ -25,6 +25,13 @@
     return [self dbLoop].isLoop;
 }
 #pragma mark ---public func
+
+- (void)initialConfiguration{
+    [self cacheUsers];
+    [self dbLoop];
+    [self semaphore];
+}
+
 - (void)delayAddUser:(SXUser *)user{
     [self delayAddUsers:@[user]];
 }
@@ -75,13 +82,6 @@
     return loop;
 }
 
-
-- (void)semaphoreLock:(void(^)())block{
-    dispatch_semaphore_wait([self semaphore], DISPATCH_TIME_FOREVER);
-    !block?:block();
-    dispatch_semaphore_signal([self semaphore]);
-}
-
 - (dispatch_semaphore_t)semaphore{
     dispatch_semaphore_t s = objc_getAssociatedObject(self, "org.sxdbmanager.semaphore");
     if (!s) {
@@ -91,6 +91,10 @@
     return s;
 }
 
-
+- (void)semaphoreLock:(void(^)())block{
+    dispatch_semaphore_wait([self semaphore], DISPATCH_TIME_FOREVER);
+    !block?:block();
+    dispatch_semaphore_signal([self semaphore]);
+}
 
 @end

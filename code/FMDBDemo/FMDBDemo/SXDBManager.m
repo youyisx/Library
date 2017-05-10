@@ -6,8 +6,8 @@
 //  Copyright © 2017年 vince. All rights reserved.
 //
 
-#import "SXDBManager.h"
 #import <FMDB/FMDB.h>
+#import "SXDBManager+Cache.h"
 
 @interface SXDBManager()
 @property (nonatomic, strong) FMDatabaseQueue * queue;
@@ -34,6 +34,7 @@
     self = [super init];
     if (self) {
         [self setupDB];
+        [self initialConfiguration];
 //        [self deleteExpireUser];
 //        [self deleteAllUser];
 //        [self deleteUserTo:50];
