@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "TestViewController.h"
+
 @interface ViewController ()<TestProtocal>
 
 @property (nonatomic, copy) NSString * value;
@@ -20,19 +21,31 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-//    TestViewController * vc = [TestViewController new];
-//    vc.delegate = self;
-//    [self.navigationController pushViewController:vc animated:YES];
     
+    
+  
+    
+    
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+        TestViewController * vc = [TestViewController new];
+//        vc.delegate = self;
+        [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+//    [[[RACObserve(self, value) merge:RACObserve(self, value2)] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(id x) {
+//        NSLog(@"---x:%@",x);
+//    }];
+//    
     //监听方法调用实现原理（rac内部通过runloop，在原函数名加前缀"rac_alias_"生成新函数，跟原函数做函数交换，然后外部调用原函数，实则调用 到新函数，新函数内部再调回到原函数，再发送热信号给外部的订阅者）
-    [[[self rac_signalForSelector:@selector(testConcat)] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(id x) {
-        NSLog(@"呵呵");
-    }];
+//    [[[self rac_signalForSelector:@selector(testConcat)] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(id x) {
+//        NSLog(@"呵呵");
+//    }];
     
 //    [self testMap];
 //    [self testChannel];
@@ -49,7 +62,7 @@
 //    [self testRetry];
 //    [self testThrottle];
 //    [self RACReplaySubject];
-    [self testSelectorSignal];
+//    [self testSelectorSignal];
 }
 
 #pragma mark - 对数据做中间处理 映射  map

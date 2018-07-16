@@ -8,10 +8,10 @@
 
 #import <AFNetworking/AFNetworking.h>
 
-#import "JRResponseAnalyse.h"
+#import "CSResponseHandleProtocol.h"
 
-@interface JRJSONResponseserializer : AFJSONResponseSerializer
+@interface CSJSONResponseserializer : AFJSONResponseSerializer
 
-@property (nonatomic, strong) JRResponseAnalyse * responseAnalyse;
+@property (nonatomic, strong) id  <CSResponseHandleProtocol>responseHandle;
 
 @end

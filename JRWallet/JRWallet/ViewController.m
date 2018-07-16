@@ -8,17 +8,32 @@
 
 #import "ViewController.h"
 
-#import "JRTestAPI.h"
-
 #import "JRHTTPDefine.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-#import "JRHTTPSessionManager.h"
 
 #import "JRResolveHandle.h"
 #import "TTTAttributedLabel.h"
+#import "CSAPI.h"
+#import "CSUploadAPI.h"
+
+#import "SXViewController.h"
+
+#import <MBProgressHUD/MBProgressHUD.h>
+@interface TestModel:NSObject
+@property (nonatomic, copy) NSString * articleSeqNo;
+@property (nonatomic, copy) NSString * indexImage;
+@property (nonatomic, copy) NSString * publishTime;
+@property (nonatomic, copy) NSString * summary;
+@property (nonatomic, copy) NSString * title;
+@end
+
+@implementation TestModel
+
+@end
+
 @interface ViewController ()
 
 @property (nonatomic, strong)     RACCommand * command;
@@ -52,55 +67,25 @@
 }
 
 - (void)test{
-    
-    RACSignal * cancel  = [self rac_signalForSelector:@selector(cancelTask)];
-    
-    [cancel subscribeNext:^(id x) {
-        NSLog(@"adfdfadfa");
-    }];
-    
-    NSDictionary * dic = @{
-                           @"body" : @{
-                                   @"uid" :@"108260086",
-                                   },
-                           @"env" :@"online",
-                           };
-    
-    JRTestAPI * t = [JRTestAPI new];
-    t.responseResolvingModel = @"JRResolveHandle";
-    RACSignal * ss = [t request:dic cancel:cancel];
-    [ss subscribeNext:^(id x) {
-        NSLog(@"x:%@",x);
-    }];
-    [ss subscribeError:^(NSError *error) {
-        NSLog(@"出错了？%@",error);
-    }];
-    
-    [ss subscribeNext:^(id x) {
-        NSLog(@"x:%@",x);
-    }];
-    
-    [ss subscribeError:^(NSError *error) {
-        NSLog(@"出错了？%@",error);
-    }];
-    
-    //
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [ss subscribeNext:^(id x) {
-//            NSLog(@"--x:%@",x);
-//        }];
-//        [ss subscribeError:^(NSError *error) {
-//            NSLog(@"--出错了？%@",error);
-//        }];
-//    });
 
+//    CSAPI * signal_ = [CSAPI new];
+//    [signal_ addDataHandleWithObjectPath:nil ObjectClass:nil];
+//    [signal_ addDataHandleWithObjectPath:@"newsList" ObjectClass:nil];
+//    [signal_ addDataHandleWithObjectPath:@"noticeList" ObjectClass:@"TestModel"];
+//    [[signal_ request:nil] subscribeNext:^(id x) {
+//        NSLog(@"x:%@",x);
+//    } error:^(NSError *error) {
+//        NSLog(@"-------error:%@",error.userInfo[NSLocalizedDescriptionKey] );
+//    }];
     
-    
+  
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self test];
+
     
     self.infoLabel.numberOfLines = 0;
     [self.infoLabel setText:[NSString stringWithFormat:@"我已同意干啥尼，ksksk，我也不知道；怎么办。。。基本面有东西基本面魂牵梦萦asdf土aaadf顶起夺需要"]];
@@ -220,9 +205,23 @@
     
 }
 
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+//    SXViewController * vc = [SXViewController new];
+//    [self presentViewController:vc animated:YES completion:nil];
+    UIWindow * window_ = [UIApplication sharedApplication].keyWindow;
+    MBProgressHUD * hud_ = [MBProgressHUD showHUDAddedTo:window_ animated:YES];
+    hud_.detailsLabel.text = @"网异常请重试";
+    hud_.detailsLabel.font = [UIFont systemFontOfSize:18.f];
+//    hud_.detailsLabel.textColor = cs_textPrimaryColor();
+    hud_.mode = MBProgressHUDModeText;
+    
+//    hud_.backgroundColor = [cs_linePrimaryColor() colorWithAlphaComponent:0.8f];
+    hud_.bezelView.layer.cornerRadius = 8.f;
+    hud_.detailsLabel.numberOfLines = 0.f;
+    hud_.removeFromSuperViewOnHide = YES;
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    [hud_ hideAnimated:YES afterDelay:2.5];
+    
     
 }
 

@@ -1,13 +1,13 @@
 //
-//  JRTestAPI.h
+//  CSAPI.h
 //  JRWallet
 //
-//  Created by jumei_vince on 2018/4/2.
+//  Created by Primeledger on 2018/6/14.
 //  Copyright © 2018年 vince_. All rights reserved.
 //
 
 #import "JRBaseAPI.h"
 
-@interface JRTestAPI : JRBaseAPI
+@interface CSAPI : JRBaseAPI
 
 @end

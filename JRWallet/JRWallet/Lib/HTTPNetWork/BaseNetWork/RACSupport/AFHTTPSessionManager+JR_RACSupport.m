@@ -16,12 +16,7 @@
         @strongify(self)
         NSURLSessionDataTask * task = [self jr_getRequest:path param:parameters subscriber:subscriber];
         return [RACDisposable disposableWithBlock:^{
-            NSLog(@"cancel task");
-
-            if (task.state != NSURLSessionTaskStateCompleted){
-                [task cancel];}
-            NSLog(@"cancel task 1");
-
+            if (task.state != NSURLSessionTaskStateCompleted)[task cancel];
         }];
     }] setNameWithFormat:@"<%@> -RAC_GET:%@,param:%@",self.class,path,parameters];
 }
@@ -32,19 +27,60 @@
         @strongify(self)
         NSURLSessionDataTask * task = [self jr_postRequest:path param:parameters subscriber:subscriber];
         return [RACDisposable disposableWithBlock:^{
-            NSLog(@"cancel task");
-
-            if (task.state != NSURLSessionTaskStateCompleted){
-                [task cancel];
-                NSLog(@"cancel task 1");
-
-            }
-            
+            if (task.state != NSURLSessionTaskStateCompleted)[task cancel];
         }];
     }] setNameWithFormat:@"<%@> -RAC_POST:%@,param:%@",self.class,path,parameters] ;
 }
 
-#pragma mark --- Private
+- (RACSignal *)jr_rac_POSTUpload:(NSString *)path
+                      parameters:(id)parameters
+                            data:(NSData *)data
+                            name:(NSString *)name
+                        fileName:(NSString *)fileName
+                        mimeType:(NSString *)mimeType
+                        progress:(void(^)(CGFloat))progress{
+    @weakify(self)
+    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self)
+        NSURLSessionDataTask * task = [self jr_POSTUpload:path
+                                               parameters:parameters
+                                                     data:data
+                                                     name:name
+                                                 fileName:fileName
+                                                 mimeType:mimeType
+                                                 progress:progress
+                                               subscriber:subscriber];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"我要来cancel了啊");
+            if (task.state != NSURLSessionTaskStateCompleted) [task cancel];
+        }];
+    }] setNameWithFormat:@"<%@> -RAC_POSTUpload:%@,param:%@",self.class,path,parameters];
+}
+- (NSURLSessionDataTask *)jr_POSTUpload:(NSString *)path
+                             parameters:(id)parameters
+                                   data:(NSData *)data
+                                   name:(NSString *)name
+                               fileName:(NSString *)fileName
+                               mimeType:(NSString *)mimeType
+                               progress:(void(^)(CGFloat))progress
+                             subscriber:(id<RACSubscriber>) subscriber{
+    NSURLSessionDataTask * sessionTask =
+    [self POST:path parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:data
+                                    name:name
+                                fileName:fileName
+                                mimeType:mimeType];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        CGFloat pro = 1.f * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
+        !progress?:progress(pro);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [subscriber sendNext:responseObject];
+        [subscriber sendCompleted];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [subscriber sendError:error];
+    }];
+    return sessionTask;
+}
 
 - (NSURLSessionDataTask *)jr_postRequest:(NSString *)path
                                    param:(NSDictionary *)param_

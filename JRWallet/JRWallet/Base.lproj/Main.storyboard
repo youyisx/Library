@@ -29,10 +29,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lwS-ZB-dWB">
+                                <rect key="frame" x="121.5" y="104" width="132" height="49"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <state key="normal" title=" 添加自选" image="coin_sel_add.png" backgroundImage="coin_sel_bc.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="e84-ST-aC4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="8po-9x-NXE"/>
+                            <constraint firstItem="lwS-ZB-dWB" firstAttribute="top" secondItem="Wgq-zH-sqN" secondAttribute="bottom" constant="40" id="Ikg-vW-7AN"/>
+                            <constraint firstItem="lwS-ZB-dWB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="TtB-dz-osu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="e84-ST-aC4" secondAttribute="trailing" constant="20" id="b6O-vm-RyR"/>
                             <constraint firstItem="e84-ST-aC4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jZO-qr-C1T"/>
                             <constraint firstItem="e84-ST-aC4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="yXe-d5-MEr"/>
@@ -64,4 +74,8 @@
             <point key="canvasLocation" x="-190" y="140"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="coin_sel_add.png" width="23" height="23"/>
+        <image name="coin_sel_bc.png" width="132" height="49"/>
+    </resources>
 </document>

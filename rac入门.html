@@ -1,0 +1,741 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>**RAC入门**</title>
+
+</head>
+<body>
+<h1><strong>RAC入门</strong></h1>
+
+<h1>RAC之操作方法</h1>
+
+<h3>1.0 RAC之映射</h3>
+
+<h4>1.1 flattenMap、map</h4>
+
+<blockquote><p>flattenMap，Map用于把源信号内容映射成新的内容.</p></blockquote>
+
+<pre><code>flattenMap简单使用
+ // 监听文本框的内容改变，把结构重新映射成一个新值.
+
+  // flattenMap作用:把源信号的内容映射成一个新的信号，信号可以是任意类型。
+
+    // flattenMap使用步骤:
+    // 1.传入一个block，block类型是返回值RACStream，参数value
+    // 2.参数value就是源信号的内容，拿到源信号的内容做处理
+    // 3.包装成RACReturnSignal信号，返回出去。
+
+    // flattenMap底层实现:
+    // 0.flattenMap内部调用bind方法实现的,flattenMap中block的返回值，会作为bind中bindBlock的返回值。
+    // 1.当订阅绑定信号，就会生成bindBlock。
+    // 2.当源信号发送内容，就会调用bindBlock(value, *stop)
+    // 3.调用bindBlock，内部就会调用flattenMap的block，flattenMap的block作用：就是把处理好的数据包装成信号。
+    // 4.返回的信号最终会作为bindBlock中的返回信号，当做bindBlock的返回信号。
+    // 5.订阅bindBlock的返回信号，就会拿到绑定信号的订阅者，把处理完成的信号内容发送出来。
+
+
+
+    [[_textField.rac_textSignal flattenMap:^RACStream *(id value) {
+
+        // block什么时候 : 源信号发出的时候，就会调用这个block。
+
+        // block作用 : 改变源信号的内容。
+
+        // 返回值：绑定信号的内容.
+        return [RACReturnSignal return:[NSString stringWithFormat:@"输出:%@",value]];
+
+    }] subscribeNext:^(id x) {
+
+        // 订阅绑定信号，每当源信号发送内容，做完处理，就会调用这个block。
+
+        NSLog(@"%@",x);
+
+    }];
+</code></pre>
+
+<pre><code>Map简单使用:
+
+ // 监听文本框的内容改变，把结构重新映射成一个新值.
+
+    // Map作用:把源信号的值映射成一个新的值
+
+    // Map使用步骤:
+    // 1.传入一个block,类型是返回对象，参数是value
+    // 2.value就是源信号的内容，直接拿到源信号的内容做处理
+    // 3.把处理好的内容，直接返回就好了，不用包装成信号，返回的值，就是映射的值。
+
+    // Map底层实现:
+    // 0.Map底层其实是调用flatternMap,Map中block中的返回的值会作为flatternMap中block中的值。
+    // 1.当订阅绑定信号，就会生成bindBlock。
+    // 3.当源信号发送内容，就会调用bindBlock(value, *stop)
+    // 4.调用bindBlock，内部就会调用flattenMap的block
+    // 5.flattenMap的block内部会调用Map中的block，把Map中的block返回的内容包装成返回的信号。
+    // 5.返回的信号最终会作为bindBlock中的返回信号，当做bindBlock的返回信号。
+    // 6.订阅bindBlock的返回信号，就会拿到绑定信号的订阅者，把处理完成的信号内容发送出来。
+
+       [[_textField.rac_textSignal map:^id(id value) {
+        // 当源信号发出，就会调用这个block，修改源信号的内容
+        // 返回值：就是处理完源信号的内容。
+        return [NSString stringWithFormat:@"输出:%@",value];
+    }] subscribeNext:^(id x) {
+
+        NSLog(@"%@",x);
+    }];
+</code></pre>
+
+<h4>总结</h4>
+
+<p>1.1.0 FlatternMap中的Block返回信号。</p>
+
+<p>1.1.1 Map中的Block返回对象。</p>
+
+<p>1.1.2 开发中，如果信号发出的值不是信号，映射一般使用Map</p>
+
+<p>1.1.3开发中，如果信号发出的值是信号，映射一般使用FlatternMap。</p>
+
+<p>1.1.4 总结：signalOfsignals用FlatternMap。</p>
+
+<pre><code>  // 创建信号中的信号
+    RACSubject *signalOfsignals = [RACSubject subject];
+    RACSubject *signal = [RACSubject subject];
+
+    [[signalOfsignals flattenMap:^RACStream *(id value) {
+
+     // 当signalOfsignals的signals发出信号才会调用
+
+        return value;
+
+    }] subscribeNext:^(id x) {
+
+        // 只有signalOfsignals的signal发出信号才会调用，因为内部订阅了bindBlock中返回的信号，也就是flattenMap返回的信号。
+        // 也就是flattenMap返回的信号发出内容，才会调用。
+
+        NSLog(@"%@aaa",x);
+    }];
+
+    // 信号的信号发送信号
+    [signalOfsignals sendNext:signal];
+
+    // 信号发送内容
+    [signal sendNext:@1];
+</code></pre>
+
+<h3>2.0 RAC之操作方法组合</h3>
+
+<h4>2.1 concat</h4>
+
+<blockquote><p>concat:按一定顺序拼接信号，当多个信号发出的时候，有顺序的接收信号。</p></blockquote>
+
+<pre><code>RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+         [subscriber sendNext:@1];
+
+        [subscriber sendCompleted];
+
+        return nil;
+    }];
+    RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+        [subscriber sendNext:@2];
+
+        return nil;
+    }];
+
+    // 把signalA拼接到signalB后，signalA发送完成，signalB才会被激活。
+    RACSignal *concatSignal = [signalA concat:signalB];
+
+    // 以后只需要面对拼接信号开发。
+    // 订阅拼接的信号，不需要单独订阅signalA，signalB
+    // 内部会自动订阅。
+    // 注意：第一个信号必须发送完成，第二个信号才会被激活
+    [concatSignal subscribeNext:^(id x) {
+
+        NSLog(@"%@",x);
+
+    }];
+
+    // concat底层实现:
+    // 1.当拼接信号被订阅，就会调用拼接信号的didSubscribe
+    // 2.didSubscribe中，会先订阅第一个源信号（signalA）
+    // 3.会执行第一个源信号（signalA）的didSubscribe
+    // 4.第一个源信号（signalA）didSubscribe中发送值，就会调用第一个源信号（signalA）订阅者的nextBlock,通过拼接信号的订阅者把值发送出来.
+    // 5.第一个源信号（signalA）didSubscribe中发送完成，就会调用第一个源信号（signalA）订阅者的completedBlock,订阅第二个源信号（signalB）这时候才激活（signalB）。
+    // 6.订阅第二个源信号（signalB）,执行第二个源信号（signalB）的didSubscribe
+    // 7.第二个源信号（signalA）didSubscribe中发送值,就会通过拼接信号的订阅者把值发送出来.
+</code></pre>
+
+<h4>2.2 then</h4>
+
+<blockquote><p>then:用于连接两个信号，当第一个信号完成，才会连接then返回的信号。</p></blockquote>
+
+<pre><code>// then:用于连接两个信号，当第一个信号完成，才会连接then返回的信号
+// 注意使用then，之前信号的值会被忽略掉.
+// 底层实现：1、先过滤掉之前的信号发出的值。2.使用concat连接then返回的信号
+[[[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+ [subscriber sendNext:@1];
+ [subscriber sendCompleted];
+ return nil;
+}] then:^RACSignal *{
+ return [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+     [subscriber sendNext:@2];
+     return nil;
+ }];
+}] subscribeNext:^(id x) {
+
+ // 只能接收到第二个信号的值，也就是then返回信号的值
+ NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h4>2.3 merge</h4>
+
+<blockquote><p>merge:把多个信号合并为一个信号，任何一个信号有新值的时候就会调用</p></blockquote>
+
+<pre><code>// merge:把多个信号合并成一个信号
+    //创建多个信号
+    RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+        [subscriber sendNext:@1];
+
+
+        return nil;
+    }];
+
+    RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+        [subscriber sendNext:@2];
+
+        return nil;
+    }];
+
+    // 合并信号,任何一个信号发送数据，都能监听到.
+    RACSignal *mergeSignal = [signalA merge:signalB];
+
+    [mergeSignal subscribeNext:^(id x) {
+
+        NSLog(@"%@",x);
+
+    }];
+
+    // 底层实现：
+    // 1.合并信号被订阅的时候，就会遍历所有信号，并且发出这些信号。
+    // 2.每发出一个信号，这个信号就会被订阅
+    // 3.也就是合并信号一被订阅，就会订阅里面所有的信号。
+    // 4.只要有一个信号被发出就会被监听。
+</code></pre>
+
+<h4>2.4 zipWith</h4>
+
+<blockquote><p>zipWith:把两个信号压缩成一个信号，只有当两个信号同时发出信号内容时，并且把两个信号的内容合并成一个元组，才会触发压缩流的next事件。</p></blockquote>
+
+<pre><code>RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+        [subscriber sendNext:@1];
+
+
+        return nil;
+    }];
+
+    RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+        [subscriber sendNext:@2];
+
+        return nil;
+    }];
+
+
+
+    // 压缩信号A，信号B
+    RACSignal *zipSignal = [signalA zipWith:signalB];
+
+    [zipSignal subscribeNext:^(id x) {
+
+        NSLog(@"%@",x);
+    }];
+
+    // 底层实现:
+    // 1.定义压缩信号，内部就会自动订阅signalA，signalB
+    // 2.每当signalA或者signalB发出信号，就会判断signalA，signalB有没有发出个信号，有就会把最近发出的信号都包装成元组发出。
+</code></pre>
+
+<h4>2.5 combineLatest</h4>
+
+<blockquote><p>combineLatest:将多个信号合并起来，并且拿到各个信号的最新的值,必须每个合并的signal至少都有过一次sendNext，才会触发合并的信号。</p></blockquote>
+
+<pre><code> RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+   [subscriber sendNext:@1];
+
+   return nil;
+}];
+
+RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+   [subscriber sendNext:@2];
+
+   return nil;
+}];
+
+// 把两个信号组合成一个信号,跟zip一样，没什么区别
+RACSignal *combineSignal = [signalA combineLatestWith:signalB];
+
+[combineSignal subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+
+// 底层实现：
+// 1.当组合信号被订阅，内部会自动订阅signalA，signalB,必须两个信号都发出内容，才会被触发。
+// 2.并且把两个信号组合成元组发出。
+</code></pre>
+
+<h4>2.6 reduce</h4>
+
+<blockquote><p>reduce聚合:用于信号发出的内容是元组，把信号发出元组的值聚合成一个值</p></blockquote>
+
+<pre><code>RACSignal *signalA = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+   [subscriber sendNext:@1];
+
+   return nil;
+}];
+
+RACSignal *signalB = [RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+   [subscriber sendNext:@2];
+
+   return nil;
+}];
+
+// 聚合
+// 常见的用法，（先组合在聚合）。combineLatest:(id&lt;NSFastEnumeration&gt;)signals reduce:(id (^)())reduceBlock
+// reduce中的block简介:
+// reduceblcok中的参数，有多少信号组合，reduceblcok就有多少参数，每个参数就是之前信号发出的内容
+// reduceblcok的返回值：聚合信号之后的内容。
+RACSignal *reduceSignal = [RACSignal combineLatest:@[signalA,signalB] reduce:^id(NSNumber *num1 ,NSNumber *num2){
+
+  return [NSString stringWithFormat:@"%@ %@",num1,num2];
+
+}];
+
+[reduceSignal subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+
+// 底层实现:
+// 1.订阅聚合信号，每次有内容发出，就会执行reduceblcok，把信号内容转换成reduceblcok返回的值。
+</code></pre>
+
+<h3>3.0 RAC之过滤</h3>
+
+<h4>3.1 filter</h4>
+
+<blockquote><p>filter:过滤信号，使用它可以获取满足条件的信号.</p></blockquote>
+
+<pre><code>// 过滤:
+// 每次信号发出，会先执行过滤条件判断.
+[_textField.rac_textSignal filter:^BOOL(NSString *value) {
+       return value.length &gt; 3;
+}];
+</code></pre>
+
+<h4>3.2 ignore</h4>
+
+<blockquote><p>ignore:忽略完某些值的信号.</p></blockquote>
+
+<pre><code>   // 内部调用filter过滤，忽略掉ignore的值
+[[_textField.rac_textSignal ignore:@"1"] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h4>3.3 distinctUntilChanged</h4>
+
+<blockquote><p>distinctUntilChanged:当上一次的值和当前的值有明显的变化就会发出信号，否则会被忽略掉。</p></blockquote>
+
+<pre><code>   // 过滤，当上一次和当前的值不一样，就会发出内容。
+// 在开发中，刷新UI经常使用，只有两次数据不一样才需要刷新
+[[_textField.rac_textSignal distinctUntilChanged] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h4>3.4 take</h4>
+
+<blockquote><p>take:从开始一共取N次的信号</p></blockquote>
+
+<pre><code>// 1、创建信号
+RACSubject *signal = [RACSubject subject];
+
+// 2、处理信号，订阅信号
+[[signal take:1] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+
+// 3.发送信号
+[signal sendNext:@1];
+
+[signal sendNext:@2];
+</code></pre>
+
+<h4>3.5 takeLast</h4>
+
+<blockquote><p>takeLast:取最后N次的信号,前提条件，订阅者必须调用完成，因为只有完成，就知道总共有多少信号.</p></blockquote>
+
+<pre><code>// 1、创建信号
+RACSubject *signal = [RACSubject subject];
+
+// 2、处理信号，订阅信号
+[[signal takeLast:1] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+
+// 3.发送信号
+[signal sendNext:@1];
+
+[signal sendNext:@2];
+
+[signal sendCompleted];
+</code></pre>
+
+<h4>3.6 takeUntil</h4>
+
+<blockquote><p>takeUntil:(RACSignal *):获取信号直到某个信号执行完成</p></blockquote>
+
+<pre><code>// 监听文本框的改变直到当前对象被销毁
+[_textField.rac_textSignal takeUntil:self.rac_willDeallocSignal];
+</code></pre>
+
+<h4>3.7 skip</h4>
+
+<blockquote><p>skip:(NSUInteger):跳过几个信号,不接受。</p></blockquote>
+
+<pre><code>// 表示输入第一次，不会被监听到，跳过第一次发出的信号
+[[_textField.rac_textSignal skip:1] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h4>3.8 switchToLatest</h4>
+
+<blockquote><p>switchToLatest:用于signalOfSignals（信号的信号），有时候信号也会发出信号，会在signalOfSignals中，获取signalOfSignals发送的最新信号。</p></blockquote>
+
+<pre><code>RACSubject *signalOfSignals = [RACSubject subject];
+RACSubject *signal = [RACSubject subject];
+
+// 获取信号中信号最近发出信号，订阅最近发出的信号。
+// 注意switchToLatest：只能用于信号中的信号
+[signalOfSignals.switchToLatest subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+[signalOfSignals sendNext:signal];
+[signal sendNext:@1];
+</code></pre>
+
+<h3>4.0 RAC之秩序</h3>
+
+<h4>4.1 doNext</h4>
+
+<blockquote><p>doNext: 执行Next之前，会先执行这个Block</p></blockquote>
+
+<h4>4.2 doCompleted</h4>
+
+<blockquote><p>doCompleted: 执行sendCompleted之前，会先执行这个Block</p></blockquote>
+
+<pre><code>[[[[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+  [subscriber sendNext:@1];
+  [subscriber sendCompleted];
+  return nil;
+}] doNext:^(id x) {
+// 执行[subscriber sendNext:@1];之前会调用这个Block
+  NSLog(@"doNext");;
+}] doCompleted:^{
+   // 执行[subscriber sendCompleted];之前会调用这个Block
+  NSLog(@"doCompleted");;
+
+}] subscribeNext:^(id x) {
+
+  NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h3>5.0 RAC之线程</h3>
+
+<h4>5.1 deliverOn</h4>
+
+<blockquote><p>deliverOn: 内容传递切换到制定线程中，副作用在原来线程中,把在创建信号时block中的代码称之为副作用。</p></blockquote>
+
+<h4>5.2 subscribeOn</h4>
+
+<blockquote><p>subscribeOn: 内容传递和副作用都会切换到制定线程中。</p></blockquote>
+
+<h3>6.0 RAC之时间</h3>
+
+<h4>6.1 timeout</h4>
+
+<blockquote><p>timeout：超时，可以让一个信号在一定的时间后，自动报错。</p></blockquote>
+
+<pre><code>RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+ return nil;
+}] timeout:1 onScheduler:[RACScheduler currentScheduler]];
+
+[signal subscribeNext:^(id x) {
+
+ NSLog(@"%@",x);
+} error:^(NSError *error) {
+ // 1秒后会自动调用
+ NSLog(@"%@",error);
+}];
+</code></pre>
+
+<h4>6.2 interval</h4>
+
+<blockquote><p>interval 定时：每隔一段时间发出信号</p></blockquote>
+
+<pre><code>[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] subscribeNext:^(id x) {
+
+ NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h4>6.3 delay</h4>
+
+<blockquote><p>delay 延迟发送next。</p></blockquote>
+
+<pre><code>RACSignal *signal = [[[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+ [subscriber sendNext:@1];
+ return nil;
+}] delay:2] subscribeNext:^(id x) {
+
+ NSLog(@"%@",x);
+}];
+</code></pre>
+
+<h3>7.0 RAC之重复</h3>
+
+<h4>7.1 retry</h4>
+
+<blockquote><p>retry重试 ：只要失败，就会重新执行创建信号中的block,直到成功.</p></blockquote>
+
+<pre><code> __block int i = 0;
+    [[[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+            if (i == 10) {
+                [subscriber sendNext:@1];
+            }else{
+                NSLog(@"接收到错误");
+                [subscriber sendError:nil];
+            }
+            i++;
+
+        return nil;
+
+    }] retry] subscribeNext:^(id x) {
+
+        NSLog(@"%@",x);
+
+    } error:^(NSError *error) {
+
+        NSLod(@"%@",error);
+    }];
+</code></pre>
+
+<h4>7.2 replay</h4>
+
+<blockquote><p>replay重放：当一个信号被多次订阅,反复播放内容</p></blockquote>
+
+<pre><code>RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+
+
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+
+        return nil;
+    }] replay];
+
+    [signal subscribeNext:^(id x) {
+
+        NSLog(@"第一个订阅者%@",x);
+
+    }];
+
+    [signal subscribeNext:^(id x) {
+
+        NSLog(@"第二个订阅者%@",x);
+
+    }];
+</code></pre>
+
+<h4>7.3 throttle</h4>
+
+<blockquote><p>throttle节流:当某个信号发送比较频繁时，可以使用节流，在某一段时间不发送信号内容，过了一段时间获取信号的最新内容发出。</p></blockquote>
+
+<pre><code> RACSubject *signal = [RACSubject subject];
+
+_signal = signal;
+
+// 节流，在一定时间（1秒）内，不接收任何信号内容，过了这个时间（1秒）获取最后发送的信号内容发出。
+[[signal throttle:1] subscribeNext:^(id x) {
+
+   NSLog(@"%@",x);
+}];
+</code></pre>
+</body>
+</html>

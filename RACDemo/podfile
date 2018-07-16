@@ -9,4 +9,6 @@ pod 'AFNetworking', '~> 3.0'
 pod 'ReactiveCocoa', '~> 2.5'
 pod 'SDWebImage'
 pod 'IQKeyboardManager'
+pod 'KVOController'
+
 end
