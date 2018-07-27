@@ -19,9 +19,13 @@
 
 @implementation ViewController
 
+- (void)testRAC:(NSString *)a{
+    NSLog(@"--a:%@",a);
+}
+
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
+
     
   
     
@@ -29,10 +33,10 @@
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-        TestViewController * vc = [TestViewController new];
-//        vc.delegate = self;
-        [self.navigationController pushViewController:vc animated:YES];
-
+//        TestViewController * vc = [TestViewController new];
+////        vc.delegate = self;
+//        [self.navigationController pushViewController:vc animated:YES];
+    [self testRAC:@"222"];
 }
 
 - (void)viewDidLoad {

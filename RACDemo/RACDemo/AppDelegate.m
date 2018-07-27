@@ -43,14 +43,63 @@
 @interface AppDelegate ()
 
 @property (nonatomic, copy) NSString * test;
+
+@property (nonatomic, strong) NSMutableArray * list;
+
 @end
 
 @implementation AppDelegate
 
+- (NSMutableArray *)kvoList{
+    return [self mutableArrayValueForKey:@"list"];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSLog(@"----%s",__FUNCTION__);
     
+    NSLog(@"active");
+    [[RACSignal interval:5.0f onScheduler:[RACScheduler mainThreadScheduler]] subscribeNext:^(id x) {
+        NSLog(@"--->定时器执行:%@",x);
+    }];
+  
+    
+//    NSLog(@"----%s",__FUNCTION__);
+//
+//    RACSignal * s1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            NSLog(@"send value");
+//            [subscriber sendNext:@"1"];
+//        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            NSLog(@"send error");
+//            [subscriber sendError:nil];
+//        });
+//        return nil;
+//    }];
+//
+//    RACSignal * s2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//
+//        [[RACSignal interval:3 onScheduler:[RACScheduler mainThreadScheduler]] subscribeNext:^(id x) {
+//            NSLog(@"定器执行任务");
+//            [subscriber sendNext:@"2"];
+//
+//        }];
+//        return nil;
+//    }];
+//
+//
+//    [[s1 concat:s2] subscribeNext:^(id x) {
+//        NSLog(@"x:%@",x);
+//    } error:^(NSError *error) {
+//        NSLog(@"concat error:%@",error);
+//    }];
+    
+//
+//    [[s1 merge:s2] subscribeNext:^(id x) {
+//        NSLog(@"merger %@",x);
+//    } error:^(NSError *error) {
+//        NSLog(@"merger error");
+//    }];
+  
 //    [[RACSignal return:@"title"] subscribeNext:^(id x) {
 //        
 //        NSLog(@"x:%@",x);

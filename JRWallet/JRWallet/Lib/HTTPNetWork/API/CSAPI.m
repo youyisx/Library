@@ -2,7 +2,7 @@
 //  CSAPI.m
 //  JRWallet
 //
-//  Created by Primeledger on 2018/6/14.
+//  Created by xxx on 2018/6/14.
 //  Copyright © 2018年 vince_. All rights reserved.
 //
 
@@ -27,7 +27,7 @@
     [commonDic setValue:@"en-GB" forKey:@"lang"];
     
     NSString *bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
-    BOOL appStoreSource = [bundleId isEqualToString:@"com.coinsuper.app"];
+    BOOL appStoreSource = [bundleId isEqualToString:@"com.xxxx.app"];
     commonDic[@"packageCode"] = appStoreSource ? @"AppStore" : @"Enterprise"; //APP安装包标识号
     commonDic[@"marketSource"] = appStoreSource ? @"AppStore" : @"Enterprise";  //市场类型："AppStore" or "Enterprise"
     

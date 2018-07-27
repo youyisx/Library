@@ -65,7 +65,7 @@
 //        NSLog(@"error:%@",error);
 //    }];
     
-    AFHTTPSessionManager * manager_ = [CSNetWorkManager sessionManagerWithHost:@"http://10.200.172.67:50006"
+    AFHTTPSessionManager * manager_ = [CSNetWorkManager sessionManagerWithHost:@"http://xxx"
                                                                  RequestHandle:nil
                                                                 ResponseHandle:nil];
     

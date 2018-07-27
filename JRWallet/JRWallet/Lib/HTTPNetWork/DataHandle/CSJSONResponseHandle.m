@@ -2,7 +2,7 @@
 //  CSJSONResponseHandle.m
 //  JRWallet
 //
-//  Created by Primeledger on 2018/6/11.
+//  Created by xxx on 2018/6/11.
 //  Copyright © 2018年 vince_. All rights reserved.
 //
 
@@ -15,7 +15,7 @@
     id result_ = nil;
     if (code.integerValue != 1000) {
         NSString * message = data[@"msg"];
-        result_ = [NSError errorWithDomain:@"com.coinsuper.responseError"
+        result_ = [NSError errorWithDomain:@"com.xxxxx.responseError"
                                       code:code.integerValue
                                   userInfo:@{NSLocalizedDescriptionKey:message}];
     }else{

@@ -2,7 +2,7 @@
 //  CSUploadAPI.m
 //  JRWallet
 //
-//  Created by Primeledger on 2018/6/14.
+//  Created by xxx on 2018/6/14.
 //  Copyright © 2018年 vince_. All rights reserved.
 //
 
@@ -19,7 +19,6 @@
 {
     self = [super init];
     if (self) {
-        self.path = @"/app/v1/common/file/upload";
     }
     return self;
 }
